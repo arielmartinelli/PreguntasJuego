@@ -9,6 +9,7 @@ import OnlineLobby from './components/OnlineLobby';
 import OnlineGame from './components/OnlineGame';
 import { mockQuestions } from './mockQuestions';
 import { audioSynth } from './audioSynth';
+import { supabase } from './supabaseClient';
 
 function App() {
   // Screen state: 
@@ -17,8 +18,9 @@ function App() {
   const [screen, setScreen] = useState('start');
   
   // Visual/Audio Settings
-  const [crtEnabled, setCrtEnabled] = useState(true); // true = wood table, false = linen canvas
+  const [crtEnabled, setCrtEnabled] = useState(true); // true = grid on, false = dark slate
   const [soundEnabled, setSoundEnabled] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   // Common Game Parameters
   const [players, setPlayers] = useState([]);
@@ -47,7 +49,7 @@ function App() {
     return [...array].sort(() => Math.random() - 0.5);
   };
 
-  // Setup questions for the session with category filtering and difficulty priority
+  // Synchronous Local Questions Selector (Fallback Mode)
   const selectQuestionsForGame = (diff, categories, countNeeded) => {
     let filtered = mockQuestions.filter(q => 
       q.difficulty === diff && 
@@ -79,8 +81,69 @@ function App() {
     return shuffled.slice(0, countNeeded);
   };
 
+  // Asynchronous Supabase Questions Loader with local fallback
+  const loadQuestionsFromSupabase = async (diff, categories, countNeeded) => {
+    try {
+      // 1. Fetch questions matching selected categories and difficulty
+      let { data, error } = await supabase
+        .from('questions')
+        .select('*')
+        .eq('difficulty', diff)
+        .in('category', categories);
+        
+      if (error) throw error;
+      
+      let pool = data || [];
+      
+      // 2. Fallback: if not enough questions, fetch other difficulties of the same categories
+      if (pool.length < countNeeded) {
+        let { data: otherData, error: otherError } = await supabase
+          .from('questions')
+          .select('*')
+          .neq('difficulty', diff)
+          .in('category', categories);
+          
+        if (!otherError && otherData) {
+          pool = [...pool, ...otherData];
+        }
+      }
+      
+      // 3. Fallback: if still no questions in these categories, use all questions
+      if (pool.length === 0) {
+        let { data: allData, error: allError } = await supabase
+          .from('questions')
+          .select('*');
+          
+        if (!allError && allData) {
+          pool = allData;
+        }
+      }
+
+      // 4. Ultimate Fallback: if Supabase is empty or offline, use local mockQuestions
+      if (pool.length === 0) {
+        console.warn("Supabase database empty. Using local mock questions.");
+        return selectQuestionsForGame(diff, categories, countNeeded);
+      }
+      
+      // Shuffle the results
+      let shuffled = shuffleArray(pool);
+      
+      // Repeat questions if the pool is smaller than we need
+      const basePool = [...shuffled];
+      while (shuffled.length < countNeeded) {
+        shuffled = [...shuffled, ...shuffleArray(basePool)];
+      }
+      
+      return shuffled.slice(0, countNeeded);
+    } catch (e) {
+      console.warn("Supabase connection offline or not configured. Using local mock questions fallback.", e);
+      return selectQuestionsForGame(diff, categories, countNeeded);
+    }
+  };
+
   // --- LOCAL GAME HANDLERS ---
-  const handleStartLocalGame = (config) => {
+  const handleStartLocalGame = async (config) => {
+    setLoading(true);
     setPlayers(config.players);
     setDifficulty(config.difficulty);
     setHardModeOptions(config.hardModeOptions);
@@ -90,9 +153,10 @@ function App() {
 
     // Calculate questions needed: rounds * players * questionsPerRound
     const countNeeded = config.rounds * config.players.length * config.questionsPerRound;
-    const selected = selectQuestionsForGame(config.difficulty, config.categories, countNeeded);
+    const selected = await loadQuestionsFromSupabase(config.difficulty, config.categories, countNeeded);
     setGameQuestions(selected);
 
+    setLoading(false);
     setScreen('local-game');
   };
 
@@ -139,7 +203,6 @@ function App() {
     setSelectedCategories(config.categories);
     setOnlineIsHost(true);
     
-    // Host joins as first player
     setOnlinePlayers([
       { name: `${config.hostName} 👑`, score: 0, isHost: true }
     ]);
@@ -164,7 +227,6 @@ function App() {
     setQuestionsPerRound(3);
     setSelectedCategories(["Geografía", "Historia", "Ciencia", "Deportes"]);
 
-    // Set initial players list (User + Mock Host + Mock players)
     setOnlinePlayers([
       { name: `${joinName.trim()} ♟️`, score: 0, isHost: false },
       { name: "Host Creador 👑", score: 0, isHost: true },
@@ -178,13 +240,12 @@ function App() {
     setOnlinePlayers(prev => [...prev, { name: playerName, score: 0, isHost: false }]);
   };
 
-  const handleStartOnlineGame = () => {
-    // In online mode, questions are shared by everyone at once.
-    // So total questions needed is simply: rounds * questionsPerRound
+  const handleStartOnlineGame = async () => {
+    setLoading(true);
     const countNeeded = totalRounds * questionsPerRound;
-    const selected = selectQuestionsForGame(difficulty, selectedCategories, countNeeded);
+    const selected = await loadQuestionsFromSupabase(difficulty, selectedCategories, countNeeded);
     setGameQuestions(selected);
-
+    setLoading(false);
     setScreen('online-game');
   };
 
@@ -193,6 +254,24 @@ function App() {
     setIsFinalScoreboard(true);
     setScreen('online-scoreboard');
   };
+
+  // --- LOADER VIEW ---
+  if (loading) {
+    return (
+      <div className={`crt-container ${!crtEnabled ? 'table-linen-mode' : ''}`}>
+        <div className="app-content">
+          <div className="arcade-panel flex-column flex-center gap-2" style={{ minHeight: '300px' }}>
+            <h2 className="subtitle-arcade flicker-text" style={{ color: 'var(--color-cyan)', textShadow: 'var(--glow-cyan)' }}>
+              ⚡ ENLAZANDO ⚡
+            </h2>
+            <p style={{ fontFamily: 'var(--font-title)', fontSize: '1rem', color: '#fff', textAlign: 'center', letterSpacing: '1px' }}>
+              Sincronizando misiones con la base de datos...
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={`crt-container ${!crtEnabled ? 'table-linen-mode' : ''}`}>
