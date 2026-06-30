@@ -1,0 +1,155 @@
+import React, { useEffect, useState } from 'react';
+import { audioSynth } from '../audioSynth';
+
+export default function OnlineLobby({ 
+  roomCode, 
+  playMode, 
+  players, 
+  isHost, 
+  soundEnabled, 
+  onStartGame, 
+  onSimulateJoin, 
+  onLeave 
+}) {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopyCode = () => {
+    if (soundEnabled) audioSynth.playCoin();
+    navigator.clipboard.writeText(roomCode);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handleStart = () => {
+    if (soundEnabled) audioSynth.playStart();
+    onStartGame();
+  };
+
+  const handleSimulate = () => {
+    if (soundEnabled) audioSynth.playCoin();
+    // Predefined board game themed players
+    const names = [
+      "Ana ♟️", "Carlos 🪵", "Sofía 🃏", "Mateo 🎲", 
+      "Laura 🚩", "Tomás 🏆", "Elena 🎨", "Felipe 🧩"
+    ];
+    // Pick a name not already in players
+    const unusedNames = names.filter(name => !players.some(p => p.name === name));
+    const randomName = unusedNames.length > 0 
+      ? unusedNames[Math.floor(Math.random() * unusedNames.length)]
+      : `Jugador ${players.length + 1} 🧩`;
+
+    onSimulateJoin(randomName);
+  };
+
+  // Auto-simulate a player joining after 3 seconds if the user is host, to show off lobby realtime feel!
+  useEffect(() => {
+    if (isHost && players.length === 1) {
+      const timer = setTimeout(() => {
+        handleSimulate();
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [players, isHost]);
+
+  return (
+    <div className="arcade-panel flex-column gap-3" style={{ minHeight: '420px' }}>
+      <div className="flex-column flex-center text-center">
+        <span className="category-badge" style={{ borderColor: 'var(--color-blue)', color: 'var(--color-blue)' }}>
+          {playMode === 'host_controller' ? "MODO HOST + CONTROLES" : "MODO LOBBY SINCRONIZADO"}
+        </span>
+        <h2 className="subtitle-arcade" style={{ fontSize: '1.4rem', margin: '0.5rem 0' }}>CÓDIGO DE ACCESO</h2>
+        
+        {/* Large room code display */}
+        <div 
+          onClick={handleCopyCode}
+          style={{ 
+            fontSize: '3rem', 
+            fontFamily: 'var(--font-title)', 
+            fontWeight: '900',
+            color: 'var(--color-pink)',
+            textShadow: '0 0 10px rgba(255, 0, 160, 0.6)',
+            letterSpacing: '3px',
+            border: '1px dashed rgba(0, 240, 255, 0.4)',
+            padding: '0.4rem 2rem',
+            margin: '0.8rem 0',
+            background: 'rgba(0, 0, 0, 0.4)',
+            cursor: 'pointer',
+            borderRadius: '8px',
+            position: 'relative'
+          }}
+          title="Click para copiar código"
+        >
+          {roomCode}
+          {copied && (
+            <span style={{ fontSize: '0.8rem', position: 'absolute', bottom: '-22px', left: '0', right: '0', textAlign: 'center', color: 'var(--color-green)', fontFamily: 'var(--font-standard)', fontWeight: 'bold' }}>
+              ✓ ¡Copiado!
+            </span>
+          )}
+        </div>
+        <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>
+          Pide a otros jugadores que ingresen este código para unirse a la mesa.
+        </p>
+      </div>
+
+      {/* Players List */}
+      <div>
+        <label className="arcade-label" style={{ textAlign: 'center' }}>JUGADORES EN LA MESA ({players.length})</label>
+        <div className="lobby-grid">
+          {players.map((p, idx) => (
+            <div key={idx} className={`player-card ${p.isHost ? 'is-ready' : ''}`} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '0.2rem' }}>
+              <span style={{ fontSize: '1.2rem', color: p.isHost ? 'var(--color-green)' : '#ffffff' }}>
+                {p.name}
+              </span>
+              <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: 'bold' }}>
+                {p.isHost ? "👑 HOST" : "👤 JUGADOR"}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <hr style={{ borderColor: 'rgba(0, 240, 255, 0.15)', margin: '1rem 0' }} />
+
+      {/* Control Buttons */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
+        {isHost ? (
+          <div style={{ display: 'flex', gap: '0.8rem' }}>
+            <button 
+              type="button"
+              className="arcade-btn btn-yellow"
+              style={{ flex: 1, fontSize: '0.9rem' }}
+              onClick={handleSimulate}
+            >
+              ➕ SIMULAR JUGADOR
+            </button>
+            <button 
+              type="button"
+              className="arcade-btn btn-green"
+              style={{ flex: 1.5, fontSize: '1rem' }}
+              onClick={handleStart}
+              disabled={players.length < 2} // Require at least 2 players to start a multiplayer game
+            >
+              ⚡ INICIAR PARTIDA
+            </button>
+          </div>
+        ) : (
+          <div className="flex-center" style={{ fontFamily: 'var(--font-title)', fontStyle: 'italic', color: 'var(--text-muted)', margin: '0.5rem 0', fontSize: '1.1rem' }}>
+            ⏳ Esperando que el Host comience la partida...
+          </div>
+        )}
+
+        <button 
+          type="button"
+          className="arcade-btn btn-red"
+          style={{ width: '100%', fontSize: '0.9rem' }}
+          onClick={() => {
+            if (soundEnabled) audioSynth.playCoin();
+            onLeave();
+          }}
+        >
+          SALIR DE LA SALA
+        </button>
+      </div>
+    </div>
+  );
+}
