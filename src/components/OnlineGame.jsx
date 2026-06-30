@@ -22,6 +22,7 @@ export default function OnlineGame({
   // Timer state
   const [timer, setTimer] = useState(20);
   const timerRef = useRef(null);
+  const [isPaused, setIsPaused] = useState(false);
 
   // Players scores & answer states
   const [localPlayers, setLocalPlayers] = useState(
@@ -52,7 +53,7 @@ export default function OnlineGame({
 
   // 1. Timer Loop
   useEffect(() => {
-    if (gameState === 'question' && timer > 0) {
+    if (gameState === 'question' && timer > 0 && !isPaused) {
       timerRef.current = setInterval(() => {
         setTimer(prev => {
           if (prev <= 1) {
@@ -72,16 +73,14 @@ export default function OnlineGame({
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
     };
-  }, [gameState, timer]);
+  }, [gameState, timer, isPaused]);
 
   // 2. Simulated Realtime: Mock players answer after random delay
   useEffect(() => {
-    if (gameState === 'question') {
+    if (gameState === 'question' && !isPaused) {
       const mockTimers = [];
       
       localPlayers.forEach((p, idx) => {
-        // Skip host if host_controller mode (host doesn't answer questions)
-        if (playMode === 'host_controller' && p.isHost) return;
         // Skip actual user (index 0 is the user)
         if (idx === 0) return;
         
@@ -120,7 +119,7 @@ export default function OnlineGame({
 
       return () => mockTimers.forEach(clearTimeout);
     }
-  }, [gameState, questionIdx]);
+  }, [gameState, questionIdx, isPaused]);
 
   // 3. Auto-reveal when everyone has answered
   useEffect(() => {
@@ -237,16 +236,26 @@ export default function OnlineGame({
         <div className="arcade-panel flex-column">
           
           {/* HUD Bar */}
-          <div className="hud-bar">
+          <div className="hud-bar" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <div className="hud-item">
               <span>RONDA:</span>
               <span className="hud-value">{round}/{totalRounds}</span>
             </div>
-            <div className="hud-item">
-              <span>PREG:</span>
-              <span className="hud-value">{questionNumberInRound}/{questionsPerRound}</span>
+            <div className="hud-item" style={{ display: 'flex', gap: '0.8rem', alignItems: 'center' }}>
+              <button 
+                type="button" 
+                className="toggle-icon-btn" 
+                style={{ fontSize: '0.6rem', padding: '0.2rem 0.5rem', background: 'var(--color-red)', border: 'none', color: '#fff', borderRadius: '10px', cursor: 'pointer' }}
+                onClick={() => setIsPaused(true)}
+              >
+                ⏸️ PAUSA
+              </button>
+              <div className="hud-item">
+                <span>PREG:</span>
+                <span className="hud-value">{questionNumberInRound}/{questionsPerRound}</span>
+              </div>
             </div>
-            <div className="hud-item" style={{ flexBasis: '100%', marginTop: '0.4rem', justifyContent: 'center', fontFamily: 'var(--font-title)' }}>
+            <div className="hud-item" style={{ flexBasis: '100%', marginTop: '0.4rem', justifyContent: 'center', fontFamily: 'var(--font-title)', fontSize: '0.7rem' }}>
               <span>MODO: {playMode === 'host_controller' ? "HOST + CONTROLES" : "LOBBY SINCRONIZADO"}</span>
             </div>
           </div>
@@ -277,20 +286,64 @@ export default function OnlineGame({
               <div style={{ width: '100%', marginTop: '1rem' }}>
                 <label className="arcade-label" style={{ textAlign: 'center' }}>RESPUESTAS DE JUGADORES</label>
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', justifyContent: 'center' }}>
-                  {localPlayers.filter(p => !p.isHost).map((p, idx) => (
+                  {localPlayers.map((p, idx) => (
                     <span 
                       key={idx} 
                       className="category-badge"
                       style={{ 
                         borderColor: p.answered ? 'var(--color-green)' : 'var(--color-yellow)',
-                        color: p.answered ? 'var(--color-green)' : 'var(--color-yellow)',
-                        background: p.answered ? '#f0fdf4' : '#fefce8'
+                        color: p.answered ? '#ffffff' : 'var(--color-yellow)',
+                        background: p.answered ? 'rgba(46,213,115,0.2)' : 'rgba(254,195,16,0.1)'
                       }}
                     >
                       {p.name} {p.answered ? "✓ LISTO" : "⏳ ..."}
                     </span>
                   ))}
                 </div>
+              </div>
+
+              {/* Host Integrated Gamepad (Allows Host Creator to play too) */}
+              <div style={{ marginTop: '1.5rem', width: '100%', borderTop: '2px dashed rgba(255,255,255,0.1)', paddingTop: '1.2rem', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <label className="arcade-label" style={{ textAlign: 'center', color: 'var(--color-yellow)', marginBottom: '0.8rem' }}>
+                  🎮 TU RESPUESTA (MANDO HOST INTEGRADO):
+                </label>
+                
+                {hasAnswered ? (
+                  <span className="category-badge" style={{ borderColor: 'var(--color-green)', color: 'var(--color-green)', background: 'rgba(46, 213, 115, 0.15)' }}>
+                    ✓ ENVIASTE TU RESPUESTA: {userSelectedAns}
+                  </span>
+                ) : (
+                  difficulty === 'hard' && !hardModeOptions ? (
+                    <form 
+                      onSubmit={(e) => {
+                        e.preventDefault();
+                        const val = e.target.elements.hostWrittenAns.value.trim();
+                        if (val) handleUserAnswerSubmit(val);
+                      }} 
+                      className="flex-column gap-2" 
+                      style={{ width: '100%', maxWidth: '400px' }}
+                    >
+                      <input name="hostWrittenAns" type="text" autoFocus required className="arcade-input" placeholder="Tu respuesta..." />
+                      <button type="submit" className="arcade-btn btn-green" style={{ width: '100%' }}>RESPONDER</button>
+                    </form>
+                  ) : (
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '0.6rem', width: '100%', maxWidth: '360px' }}>
+                      {currentQuestion.options.map((_, idx) => {
+                        const letter = getOptionLetter(idx);
+                        return (
+                          <button 
+                            key={idx}
+                            className="arcade-btn btn-yellow"
+                            style={{ minHeight: '44px', fontSize: '1rem', padding: '0.4rem' }}
+                            onClick={() => handleUserAnswerSubmit(currentQuestion.options[idx])}
+                          >
+                            {letter}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  )
+                )}
               </div>
             </div>
           ) : playMode === 'host_controller' && !isHost ? (
@@ -558,6 +611,39 @@ export default function OnlineGame({
               Esperando que el Host continúe la partida...
             </div>
           )}
+        </div>
+      )}
+
+      {/* 5. Pause Screen Overlay */}
+      {isPaused && (
+        <div 
+          style={{ 
+            position: 'absolute', 
+            top: 0, left: 0, right: 0, bottom: 0, 
+            background: 'rgba(0,0,0,0.85)', 
+            backdropFilter: 'blur(8px)',
+            zIndex: 2000, 
+            display: 'flex', 
+            flexDirection: 'column', 
+            alignItems: 'center', 
+            justifyContent: 'center',
+            borderRadius: 'var(--border-radius-lg)',
+            gap: '1.5rem'
+          }}
+        >
+          <h2 className="subtitle-arcade flicker-text" style={{ color: 'var(--color-yellow)', fontSize: '1.8rem', textShadow: '2px 2px 0 #000' }}>
+            ⏸️ PARTIDA PAUSADA
+          </h2>
+          <button 
+            className="arcade-btn btn-green" 
+            onClick={() => {
+              if (soundEnabled) audioSynth.playCoin();
+              setIsPaused(false);
+            }}
+            style={{ minWidth: '200px' }}
+          >
+            ▶️ REANUDAR
+          </button>
         </div>
       )}
 

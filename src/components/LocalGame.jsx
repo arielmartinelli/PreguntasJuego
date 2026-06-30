@@ -22,6 +22,7 @@ export default function LocalGame({
   // Timer state
   const [timer, setTimer] = useState(20);
   const timerRef = useRef(null);
+  const [isPaused, setIsPaused] = useState(false);
   
   // Game interaction states
   const [selectedOption, setSelectedOption] = useState(null);
@@ -47,7 +48,7 @@ export default function LocalGame({
 
   // Timer loop
   useEffect(() => {
-    if (gameState === 'question' && timer > 0) {
+    if (gameState === 'question' && timer > 0 && !isPaused) {
       timerRef.current = setInterval(() => {
         setTimer((prev) => {
           if (prev <= 1) {
@@ -71,7 +72,7 @@ export default function LocalGame({
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
     };
-  }, [gameState, timer]);
+  }, [gameState, timer, isPaused]);
 
   const handleStartTurn = () => {
     if (soundEnabled) audioSynth.playStart();
@@ -220,18 +221,27 @@ export default function LocalGame({
       {gameState === 'question' && (
         <div className="arcade-panel flex-column">
           {/* HUD Bar */}
-          <div className="hud-bar">
+          <div className="hud-bar" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <div className="hud-item">
               <span>RONDA:</span>
               <span className="hud-value">{round}/{totalRounds}</span>
             </div>
-            <div className="hud-item">
-              <span>TURNO:</span>
-              <span className="hud-value" style={{ color: 'var(--color-secondary)' }}>{activePlayer.name}</span>
+            <div className="hud-item" style={{ fontSize: '1.2rem', color: 'var(--color-yellow)' }}>
+              <span>{activePlayer.name}</span>
             </div>
-            <div className="hud-item">
-              <span>PREG:</span>
-              <span className="hud-value" style={{ color: 'var(--color-tertiary)' }}>{questionsAnsweredInTurn + 1}/{questionsPerRound}</span>
+            <div className="hud-item" style={{ display: 'flex', gap: '0.8rem', alignItems: 'center' }}>
+              <button 
+                type="button" 
+                className="toggle-icon-btn" 
+                style={{ fontSize: '0.6rem', padding: '0.2rem 0.5rem', background: 'var(--color-red)', border: 'none', color: '#fff', borderRadius: '10px', cursor: 'pointer' }}
+                onClick={() => setIsPaused(true)}
+              >
+                ⏸️ PAUSA
+              </button>
+              <div className="hud-item">
+                <span>PREG:</span>
+                <span className="hud-value">{questionsAnsweredInTurn + 1}/{questionsPerRound}</span>
+              </div>
             </div>
             <div className="hud-item">
               <span>SCORE:</span>
@@ -368,6 +378,39 @@ export default function LocalGame({
           onAction={handleScoreboardContinue}
           soundEnabled={soundEnabled}
         />
+      )}
+
+      {/* 5. Pause Screen Overlay */}
+      {isPaused && (
+        <div 
+          style={{ 
+            position: 'absolute', 
+            top: 0, left: 0, right: 0, bottom: 0, 
+            background: 'rgba(0,0,0,0.85)', 
+            backdropFilter: 'blur(8px)',
+            zIndex: 2000, 
+            display: 'flex', 
+            flexDirection: 'column', 
+            alignItems: 'center', 
+            justifyContent: 'center',
+            borderRadius: 'var(--border-radius-lg)',
+            gap: '1.5rem'
+          }}
+        >
+          <h2 className="subtitle-arcade flicker-text" style={{ color: 'var(--color-yellow)', fontSize: '1.8rem', textShadow: '2px 2px 0 #000' }}>
+            ⏸️ PARTIDA PAUSADA
+          </h2>
+          <button 
+            className="arcade-btn btn-green" 
+            onClick={() => {
+              if (soundEnabled) audioSynth.playCoin();
+              setIsPaused(false);
+            }}
+            style={{ minWidth: '200px' }}
+          >
+            ▶️ REANUDAR
+          </button>
+        </div>
       )}
     </div>
   );
