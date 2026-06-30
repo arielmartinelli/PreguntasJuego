@@ -62,21 +62,7 @@ export default function OnlineLobby({
         {/* Large room code display */}
         <div 
           onClick={handleCopyCode}
-          style={{ 
-            fontSize: '3rem', 
-            fontFamily: 'var(--font-title)', 
-            fontWeight: '900',
-            color: 'var(--color-pink)',
-            textShadow: '0 0 10px rgba(255, 0, 160, 0.6)',
-            letterSpacing: '3px',
-            border: '1px dashed rgba(0, 240, 255, 0.4)',
-            padding: '0.4rem 2rem',
-            margin: '0.8rem 0',
-            background: 'rgba(0, 0, 0, 0.4)',
-            cursor: 'pointer',
-            borderRadius: '8px',
-            position: 'relative'
-          }}
+          className="room-code-display"
           title="Click para copiar código"
         >
           {roomCode}

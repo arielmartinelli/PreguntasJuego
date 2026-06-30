@@ -265,11 +265,10 @@ export default function OnlineGame({
                 {currentQuestion.question_text}
               </h2>
               
-              {/* Show options to look at */}
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.6rem', width: '100%', margin: '1rem 0' }}>
                 {currentQuestion.options.map((opt, idx) => (
-                  <div key={idx} style={{ padding: '0.8rem', border: '1px solid var(--color-border)', borderRadius: '6px', background: '#faf8f5', textAlign: 'left', fontWeight: 'bold' }}>
-                    <span style={{ color: 'var(--color-red)', marginRight: '0.4rem' }}>({getOptionLetter(idx)})</span> {opt}
+                  <div key={idx} style={{ padding: '0.8rem', border: '1px solid rgba(0, 240, 255, 0.2)', borderRadius: '6px', background: 'rgba(0, 0, 0, 0.4)', textAlign: 'left', fontWeight: 'bold', color: '#ffffff' }}>
+                    <span style={{ color: 'var(--color-pink)', marginRight: '0.4rem' }}>({getOptionLetter(idx)})</span> {opt}
                   </div>
                 ))}
               </div>
@@ -310,15 +309,17 @@ export default function OnlineGame({
               </div>
 
               {mockProjectorOpen && (
-                <div className="arcade-panel" style={{ padding: '1rem', background: '#f5eedc', borderStyle: 'dashed', marginBottom: '1rem' }}>
+                <div className="arcade-panel" style={{ padding: '1rem', background: 'rgba(255, 0, 160, 0.05)', border: '1px dashed rgba(255, 0, 160, 0.4)', marginBottom: '1rem' }}>
                   <span className="category-badge" style={{ fontSize: '0.65rem' }}>PROYECTOR HOST: {currentQuestion.category}</span>
-                  <div style={{ fontFamily: 'var(--font-title)', fontWeight: 'bold', fontSize: '1.2rem', color: 'var(--text-dark)' }}>
+                  <div style={{ fontFamily: 'var(--font-title)', fontWeight: 'bold', fontSize: '1.2rem', color: '#ffffff' }}>
                     {currentQuestion.question_text}
                   </div>
                   {/* Show answer options list */}
                   <div style={{ fontSize: '0.85rem', marginTop: '0.4rem', color: 'var(--text-muted)' }}>
                     {currentQuestion.options.map((o, idx) => (
-                      <div key={idx}>({getOptionLetter(idx)}) {o}</div>
+                      <div key={idx} style={{ color: '#ffffff', margin: '0.2rem 0' }}>
+                        <span style={{ color: 'var(--color-cyan)', fontWeight: 'bold', marginRight: '0.3rem' }}>({getOptionLetter(idx)})</span> {o}
+                      </div>
                     ))}
                   </div>
                 </div>
