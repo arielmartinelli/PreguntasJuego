@@ -260,12 +260,12 @@ function App() {
     return (
       <div className={`crt-container ${!crtEnabled ? 'table-linen-mode' : ''}`}>
         <div className="app-content">
-          <div className="arcade-panel flex-column flex-center gap-2" style={{ minHeight: '300px' }}>
-            <h2 className="subtitle-arcade flicker-text" style={{ color: 'var(--color-cyan)', textShadow: 'var(--glow-cyan)' }}>
-              ⚡ ENLAZANDO ⚡
+          <div className="arcade-panel flex-column flex-center gap-2" style={{ minHeight: '260px' }}>
+            <h2 className="subtitle-arcade flicker-text" style={{ color: 'var(--color-yellow)', textShadow: '2px 2px 0 #000000' }}>
+              ⚡ CARGANDO... ⚡
             </h2>
-            <p style={{ fontFamily: 'var(--font-title)', fontSize: '1rem', color: '#fff', textAlign: 'center', letterSpacing: '1px' }}>
-              Sincronizando misiones con la base de datos...
+            <p style={{ fontFamily: 'var(--font-title)', fontSize: '0.6rem', color: '#fff', textAlign: 'center', marginTop: '1rem', lineHeight: '1.6' }}>
+              Buscando preguntas en el castillo...
             </p>
           </div>
         </div>
@@ -284,7 +284,7 @@ function App() {
       />
 
       <div className="app-content">
-        <h1 className="arcade-title">🎲 MESA DE TRIVIA 🎲</h1>
+        <h1 className="arcade-title">⚡ TRIVIA BROS ⚡</h1>
 
         {/* 1. START SCREEN */}
         {screen === 'start' && (

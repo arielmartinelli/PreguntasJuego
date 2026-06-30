@@ -33,7 +33,7 @@ export default function Scoreboard({ players, isFinal, currentRound, totalRounds
         /* --- FINAL PODIUM SCREEN --- */
         <div className="flex-column flex-center gap-3" style={{ width: '100%' }}>
           <div>
-            <span className="category-badge" style={{ borderColor: 'var(--color-tertiary)', color: 'var(--color-tertiary)' }}>
+            <span className="category-badge" style={{ borderColor: 'var(--color-yellow)', color: 'var(--color-yellow)' }}>
               🏆 PODIO FINAL 🏆
             </span>
           </div>
@@ -59,7 +59,7 @@ export default function Scoreboard({ players, isFinal, currentRound, totalRounds
                 <span style={{ fontSize: '1.2rem', color: 'var(--text-primary)', textAlign: 'center', fontWeight: 'bold' }}>
                   {second.name}
                 </span>
-                <span style={{ fontSize: '1.1rem', color: 'var(--color-tertiary)', marginBottom: '0.5rem' }}>
+                <span style={{ fontSize: '1.1rem', color: 'var(--color-yellow)', marginBottom: '0.5rem' }}>
                   {second.score} pt(s)
                 </span>
                 <div 
@@ -84,10 +84,10 @@ export default function Scoreboard({ players, isFinal, currentRound, totalRounds
             {/* 1st Place */}
             {first && (
               <div className="flex-column flex-center" style={{ flex: 1.2, zIndex: 10 }}>
-                <span style={{ fontSize: '1.5rem', color: 'var(--color-tertiary)', textAlign: 'center', fontWeight: 'bold' }}>
+                <span style={{ fontSize: '1.5rem', color: 'var(--color-yellow)', textAlign: 'center', fontWeight: 'bold' }}>
                   👑 {first.name}
                 </span>
-                <span style={{ fontSize: '1.3rem', color: 'var(--color-success)', marginBottom: '0.5rem' }}>
+                <span style={{ fontSize: '1.3rem', color: 'var(--color-green)', marginBottom: '0.5rem' }}>
                   {first.score} pt(s)
                 </span>
                 <div 
@@ -95,7 +95,7 @@ export default function Scoreboard({ players, isFinal, currentRound, totalRounds
                     width: '100%', 
                     height: '130px', 
                     background: '#333',
-                    border: '4px solid var(--color-tertiary)',
+                    border: '4px solid var(--color-yellow)',
                     borderRadius: '0',
                     display: 'flex',
                     flexDirection: 'column',
@@ -115,7 +115,7 @@ export default function Scoreboard({ players, isFinal, currentRound, totalRounds
                 <span style={{ fontSize: '1.1rem', color: 'var(--text-primary)', textAlign: 'center', fontWeight: 'bold' }}>
                   {third.name}
                 </span>
-                <span style={{ fontSize: '1rem', color: 'var(--color-tertiary)', marginBottom: '0.5rem' }}>
+                <span style={{ fontSize: '1rem', color: 'var(--color-yellow)', marginBottom: '0.5rem' }}>
                   {third.score} pt(s)
                 </span>
                 <div 
@@ -154,7 +154,7 @@ export default function Scoreboard({ players, isFinal, currentRound, totalRounds
                     <tr key={index}>
                       <td>#{index + 4}</td>
                       <td>{player.name}</td>
-                      <td style={{ textAlign: 'right', color: 'var(--color-success)' }}>{player.score} pt(s)</td>
+                      <td style={{ textAlign: 'right', color: 'var(--color-green)' }}>{player.score} pt(s)</td>
                     </tr>
                   ))}
                 </tbody>
@@ -174,7 +174,7 @@ export default function Scoreboard({ players, isFinal, currentRound, totalRounds
         /* --- INTERMEDIATE SCOREBOARD --- */
         <div className="flex-column flex-center gap-3" style={{ width: '100%' }}>
           <div>
-            <span className="category-badge" style={{ borderColor: 'var(--color-primary)', color: 'var(--color-primary)' }}>
+            <span className="category-badge" style={{ borderColor: 'var(--color-yellow)', color: 'var(--color-yellow)' }}>
               POSICIONES DE LA RONDA
             </span>
           </div>
@@ -199,7 +199,7 @@ export default function Scoreboard({ players, isFinal, currentRound, totalRounds
                       {index > 2 && `#${index + 1}`}
                     </td>
                     <td>{player.name}</td>
-                    <td style={{ textAlign: 'right', color: 'var(--color-success)' }}>{player.score} pt(s)</td>
+                    <td style={{ textAlign: 'right', color: 'var(--color-green)' }}>{player.score} pt(s)</td>
                   </tr>
                 ))}
               </tbody>

@@ -6,9 +6,9 @@ export default function CrtToggle({ crtEnabled, setCrtEnabled, soundEnabled, set
       <button 
         className="toggle-icon-btn" 
         onClick={() => setCrtEnabled(!crtEnabled)}
-        title="Alternar grilla digital cyberpunk"
+        title="Alternar fondo Día (1-1) / Noche (1-2)"
       >
-        INTERFAZ: {crtEnabled ? "GRID 🌐" : "DARK 🌌"}
+        MUNDO: {crtEnabled ? "1-1 ☀️" : "1-2 🌙"}
       </button>
       <button 
         className="toggle-icon-btn" 

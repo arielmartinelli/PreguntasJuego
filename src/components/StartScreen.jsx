@@ -13,11 +13,22 @@ export default function StartScreen({ onSelectLocal, onSelectOnline, soundEnable
   };
 
   return (
-    <div className="arcade-panel flex-column flex-center gap-3" style={{ minHeight: '400px' }}>
+    <div className="arcade-panel flex-column flex-center gap-3" style={{ minHeight: '380px' }}>
       <div className="flex-column flex-center">
-        <h2 className="subtitle-arcade flicker-text">★ SYSTEM START ★</h2>
-        <p style={{ fontFamily: 'var(--font-title)', fontSize: '1.6rem', color: 'var(--color-cyan)', textShadow: 'var(--glow-cyan)', marginBottom: '2rem', textAlign: 'center', fontWeight: 'bold' }}>
-          CYBER TRIVIA ARENA
+        <h2 className="subtitle-arcade flicker-text">★ PRESS START ★</h2>
+        <p 
+          style={{ 
+            fontFamily: 'var(--font-title)', 
+            fontSize: 'clamp(1rem, 4vw, 1.4rem)', 
+            color: 'var(--color-yellow)', 
+            textShadow: '3px 3px 0 #000000', 
+            marginBottom: '2rem', 
+            textAlign: 'center', 
+            fontWeight: 'bold',
+            lineHeight: '1.6'
+          }}
+        >
+          SUPER TRIVIA BROS
         </p>
       </div>
 
@@ -25,7 +36,7 @@ export default function StartScreen({ onSelectLocal, onSelectOnline, soundEnable
         <button 
           className="arcade-btn btn-green"
           onClick={handleLocalClick}
-          style={{ width: '100%', fontSize: '1.1rem', padding: '1.2rem' }}
+          style={{ width: '100%', fontSize: '0.8rem', padding: '1.1rem' }}
         >
           🎮 JUGAR LOCAL
         </button>
@@ -33,14 +44,14 @@ export default function StartScreen({ onSelectLocal, onSelectOnline, soundEnable
         <button 
           className="arcade-btn btn-pink"
           onClick={handleOnlineClick}
-          style={{ width: '100%', fontSize: '1.1rem', padding: '1.2rem' }}
+          style={{ width: '100%', fontSize: '0.8rem', padding: '1.1rem' }}
         >
           🌐 SALAS ONLINE
         </button>
       </div>
 
-      <div style={{ marginTop: '2rem', fontFamily: 'var(--font-title)', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-        NEON EDITION © 2026
+      <div style={{ marginTop: '2rem', fontFamily: 'var(--font-title)', fontSize: '0.6rem', color: '#888' }}>
+        NES EDITION © 2026
       </div>
     </div>
   );
