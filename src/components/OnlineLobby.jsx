@@ -9,6 +9,7 @@ export default function OnlineLobby({
   soundEnabled, 
   onStartGame, 
   onSimulateJoin, 
+  onKickPlayer,
   onLeave 
 }) {
   const [copied, setCopied] = useState(false);
@@ -82,7 +83,45 @@ export default function OnlineLobby({
         <label className="arcade-label" style={{ textAlign: 'center' }}>JUGADORES EN LA MESA ({players.length})</label>
         <div className="lobby-grid">
           {players.map((p, idx) => (
-            <div key={idx} className={`player-card ${p.isHost ? 'is-ready' : ''}`} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '0.2rem' }}>
+            <div 
+              key={idx} 
+              className={`player-card ${p.isHost ? 'is-ready' : ''}`} 
+              style={{ 
+                display: 'flex', 
+                flexDirection: 'column', 
+                alignItems: 'center', 
+                justifyContent: 'center', 
+                gap: '0.2rem',
+                position: 'relative'
+              }}
+            >
+              {!p.isHost && isHost && (
+                <button
+                  type="button"
+                  onClick={() => onKickPlayer(idx)}
+                  style={{
+                    position: 'absolute',
+                    top: '4px',
+                    right: '4px',
+                    background: 'var(--color-red)',
+                    border: 'none',
+                    color: '#ffffff',
+                    borderRadius: '50%',
+                    width: '22px',
+                    height: '22px',
+                    fontSize: '0.7rem',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontWeight: 'bold',
+                    boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                  }}
+                  title="Sacar de la mesa"
+                >
+                  ✕
+                </button>
+              )}
               <span style={{ fontSize: '1.2rem', color: p.isHost ? 'var(--color-green)' : '#ffffff' }}>
                 {p.name}
               </span>

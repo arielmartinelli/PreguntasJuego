@@ -239,6 +239,11 @@ function App() {
   const handleSimulateJoin = (playerName) => {
     setOnlinePlayers(prev => [...prev, { name: playerName, score: 0, isHost: false }]);
   };
+  
+  const handleKickPlayer = (index) => {
+    if (soundEnabled) audioSynth.playCoin();
+    setOnlinePlayers(prev => prev.filter((_, idx) => idx !== index));
+  };
 
   const handleStartOnlineGame = async () => {
     setLoading(true);
@@ -316,6 +321,7 @@ function App() {
             soundEnabled={soundEnabled}
             onGameEnd={handleGameEnd}
             onRoundComplete={handleRoundComplete}
+            onCancel={() => setScreen('start')}
           />
         )}
 
@@ -450,6 +456,7 @@ function App() {
             soundEnabled={soundEnabled}
             onStartGame={handleStartOnlineGame}
             onSimulateJoin={handleSimulateJoin}
+            onKickPlayer={handleKickPlayer}
             onLeave={() => setScreen('online-home')}
           />
         )}
@@ -467,6 +474,7 @@ function App() {
             isHost={onlineIsHost}
             soundEnabled={soundEnabled}
             onGameEnd={handleOnlineGameEnd}
+            onCancel={() => setScreen('start')}
           />
         )}
 

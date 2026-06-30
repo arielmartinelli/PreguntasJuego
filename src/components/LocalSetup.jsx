@@ -26,6 +26,15 @@ export default function LocalSetup({ onStartGame, onBack, soundEnabled }) {
     setNumPlayers(num);
   };
 
+  const removePlayerField = (idx) => {
+    if (numPlayers <= 1) return;
+    if (soundEnabled) audioSynth.playCoin();
+    const updatedNames = playerNames.filter((_, i) => i !== idx);
+    updatedNames.push(""); // Keep length
+    setPlayerNames(updatedNames);
+    setNumPlayers(numPlayers - 1);
+  };
+
   const handleNameChange = (index, value) => {
     const updated = [...playerNames];
     updated[index] = value;
@@ -125,16 +134,40 @@ export default function LocalSetup({ onStartGame, onBack, soundEnabled }) {
           <label className="arcade-label">NOMBRES DE LOS JUGADORES</label>
           <div style={{ display: 'grid', gridTemplateColumns: numPlayers > 3 ? '1fr 1fr' : '1fr', gap: '0.8rem' }}>
             {Array.from({ length: numPlayers }).map((_, idx) => (
-              <div key={idx} className="flex-column">
+              <div key={idx} style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
                 <input
                   type="text"
                   maxLength={15}
                   placeholder={`JUGADOR ${idx + 1}`}
                   className="arcade-input"
-                  style={{ fontSize: '1.2rem', padding: '0.4rem' }}
+                  style={{ fontSize: '1.2rem', padding: '0.4rem', flex: 1 }}
                   value={playerNames[idx]}
                   onChange={(e) => handleNameChange(idx, e.target.value)}
                 />
+                {numPlayers > 1 && (
+                  <button
+                    type="button"
+                    onClick={() => removePlayerField(idx)}
+                    style={{ 
+                      background: 'var(--color-red)', 
+                      border: 'none', 
+                      color: '#ffffff', 
+                      borderRadius: '50%', 
+                      width: '32px', 
+                      height: '32px', 
+                      cursor: 'pointer',
+                      fontSize: '1.2rem',
+                      fontWeight: 'bold',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                    }}
+                    title="Eliminar jugador"
+                  >
+                    ✕
+                  </button>
+                )}
               </div>
             ))}
           </div>

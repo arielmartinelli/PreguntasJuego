@@ -11,7 +11,8 @@ export default function OnlineGame({
   playMode, // 'host_controller' | 'shared_lobby'
   isHost,   // Is this device the Host
   soundEnabled, 
-  onGameEnd 
+  onGameEnd,
+  onCancel
 }) {
   // Game states: 'question' | 'feedback' | 'scoreboard'
   const [gameState, setGameState] = useState('question');
@@ -234,6 +235,27 @@ export default function OnlineGame({
       {/* -------------------- PANTALLA JUEGO -------------------- */}
       {gameState === 'question' && (
         <div className="arcade-panel flex-column">
+          {/* Highly Visible Floating Pause Button */}
+          <button 
+            type="button" 
+            className="arcade-btn btn-pink" 
+            style={{ 
+              position: 'absolute', 
+              top: '12px', 
+              right: '12px', 
+              minHeight: 'auto', 
+              height: '36px', 
+              padding: '0 0.8rem', 
+              fontSize: '0.75rem', 
+              borderRadius: '20px', 
+              boxShadow: '0 3px 0 rgba(0,0,0,0.1)',
+              zIndex: 50,
+              margin: 0
+            }}
+            onClick={() => setIsPaused(true)}
+          >
+            ⏸️ PAUSAR
+          </button>
           
           {/* HUD Bar */}
           <div className="hud-bar" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -241,19 +263,9 @@ export default function OnlineGame({
               <span>RONDA:</span>
               <span className="hud-value">{round}/{totalRounds}</span>
             </div>
-            <div className="hud-item" style={{ display: 'flex', gap: '0.8rem', alignItems: 'center' }}>
-              <button 
-                type="button" 
-                className="toggle-icon-btn" 
-                style={{ fontSize: '0.6rem', padding: '0.2rem 0.5rem', background: 'var(--color-red)', border: 'none', color: '#fff', borderRadius: '10px', cursor: 'pointer' }}
-                onClick={() => setIsPaused(true)}
-              >
-                ⏸️ PAUSA
-              </button>
-              <div className="hud-item">
-                <span>PREG:</span>
-                <span className="hud-value">{questionNumberInRound}/{questionsPerRound}</span>
-              </div>
+            <div className="hud-item">
+              <span>PREG:</span>
+              <span className="hud-value">{questionNumberInRound}/{questionsPerRound}</span>
             </div>
             <div className="hud-item" style={{ flexBasis: '100%', marginTop: '0.4rem', justifyContent: 'center', fontFamily: 'var(--font-title)', fontSize: '0.7rem' }}>
               <span>MODO: {playMode === 'host_controller' ? "HOST + CONTROLES" : "LOBBY SINCRONIZADO"}</span>
@@ -628,7 +640,7 @@ export default function OnlineGame({
             alignItems: 'center', 
             justifyContent: 'center',
             borderRadius: 'var(--border-radius-lg)',
-            gap: '1.5rem'
+            gap: '1.2rem'
           }}
         >
           <h2 className="subtitle-arcade flicker-text" style={{ color: 'var(--color-yellow)', fontSize: '1.8rem', textShadow: '2px 2px 0 #000' }}>
@@ -640,9 +652,19 @@ export default function OnlineGame({
               if (soundEnabled) audioSynth.playCoin();
               setIsPaused(false);
             }}
-            style={{ minWidth: '200px' }}
+            style={{ minWidth: '220px' }}
           >
             ▶️ REANUDAR
+          </button>
+          <button 
+            className="arcade-btn btn-red" 
+            onClick={() => {
+              if (soundEnabled) audioSynth.playCoin();
+              onCancel();
+            }}
+            style={{ minWidth: '220px' }}
+          >
+            ❌ CANCELAR PARTIDA
           </button>
         </div>
       )}
