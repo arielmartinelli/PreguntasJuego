@@ -211,7 +211,7 @@ export default function LocalSetup({ onStartGame, onBack, soundEnabled }) {
             >
               -
             </button>
-            <span style={{ fontSize: '1.8rem', width: '50px', textAlign: 'center', color: 'var(--color-cyan)', textShadow: '0 0 8px rgba(0, 240, 255, 0.5)', fontFamily: 'var(--font-title)', fontWeight: 'bold' }}>
+            <span style={{ fontSize: '1.8rem', width: '50px', textAlign: 'center', color: 'var(--color-blue)', fontFamily: 'var(--font-title)', fontWeight: 'bold' }}>
               {rounds}
             </span>
             <button
@@ -239,7 +239,7 @@ export default function LocalSetup({ onStartGame, onBack, soundEnabled }) {
             >
               -
             </button>
-            <span style={{ fontSize: '1.8rem', width: '50px', textAlign: 'center', color: 'var(--color-pink)', textShadow: '0 0 8px rgba(255, 0, 160, 0.5)', fontFamily: 'var(--font-title)', fontWeight: 'bold' }}>
+            <span style={{ fontSize: '1.8rem', width: '50px', textAlign: 'center', color: 'var(--color-orange)', fontFamily: 'var(--font-title)', fontWeight: 'bold' }}>
               {questionsPerRound}
             </span>
             <button

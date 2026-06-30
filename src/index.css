@@ -1,23 +1,36 @@
-/* Super Mario Bros Retro NES Theme */
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Nunito:wght@400;700;900&display=swap');
+/* Trivia Crack / Preguntados Bubbly Theme */
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap');
 
 :root {
-  /* Mario Colors */
-  --bg-sky-day: #5c94fc;       /* Classic NES Sky Blue */
-  --bg-sky-night: #000028;     /* Underground / Night Blue */
+  /* Trivia Crack Light / Dark Base Backgrounds */
+  --bg-light: #f5f7fb;
+  --bg-dark: #121620;
   
-  --color-red: #e52521;        /* Mario Red */
-  --color-green: #43b047;      /* Luigi Green */
-  --color-yellow: #fec310;     /* Coin Yellow */
-  --color-orange: #f85800;     /* Brick Orange */
-  --color-blue: #0040c0;       /* Sky-top Blue */
+  --card-light: #ffffff;
+  --card-dark: #1e2433;
   
-  --text-white: #ffffff;
-  --text-black: #000000;
+  /* Brand Theme Colors */
+  --color-blue: #3498db;         /* Geography */
+  --color-green: #2ecc71;        /* Science */
+  --color-yellow: #f1c40f;       /* History */
+  --color-red: #e74c3c;          /* Art & Lit */
+  --color-orange: #e67e22;       /* Sports */
+  --color-purple: #9b59b6;       /* Entertainment */
+  
+  --color-btn-primary: #ff4757;  /* Spin/Play Red Button */
+  --color-btn-green: #2ed573;    /* Action Green */
+  --color-btn-yellow: #ffa502;   /* Yellow button */
+  
+  --text-light-primary: #2f3542;
+  --text-dark-primary: #ffffff;
+  --text-muted: #747d8c;
   
   /* Fonts */
-  --font-title: 'Press Start 2P', monospace;
-  --font-standard: 'Nunito', sans-serif;
+  --font-title: 'Fredoka', sans-serif;
+  --font-standard: 'Fredoka', sans-serif;
+  
+  --border-radius-lg: 24px;
+  --border-radius-sm: 12px;
 }
 
 * {
@@ -27,37 +40,35 @@
 }
 
 body {
-  background-color: var(--bg-sky-day);
-  color: var(--text-white);
+  background-color: var(--bg-light);
+  color: var(--text-light-primary);
   font-family: var(--font-standard);
   font-size: 1.15rem;
   min-height: 100vh;
   overflow-x: hidden;
   position: relative;
-  transition: background-color 0.4s ease;
+  transition: all 0.3s ease;
 }
 
-/* Day vs Night mode backgrounds */
+/* Light / Dark toggling using table-linen-mode class */
 .crt-container {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   position: relative;
   width: 100%;
-  background-color: var(--bg-sky-day);
-  transition: all 0.4s ease;
-  /* Retro Cloud details using CSS gradients (simulating pixelated sky details) */
+  background-color: var(--bg-light);
+  transition: all 0.3s ease;
+  /* Playful faint bubbles background pattern */
   background-image: 
-    radial-gradient(ellipse at 30% 20%, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.4) 8%, transparent 9%),
-    radial-gradient(ellipse at 75% 15%, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.4) 10%, transparent 11%);
+    radial-gradient(circle at 10% 20%, rgba(52, 152, 219, 0.05) 0%, rgba(52, 152, 219, 0.05) 12%, transparent 13%),
+    radial-gradient(circle at 85% 80%, rgba(155, 89, 182, 0.05) 0%, rgba(155, 89, 182, 0.05) 15%, transparent 16%);
   background-size: 100% 100%;
 }
 
 .table-linen-mode {
-  background-color: var(--bg-sky-night) !important;
-  background-image: 
-    radial-gradient(circle at 10% 15%, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.1) 1%, transparent 2%),
-    radial-gradient(circle at 80% 30%, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.1) 1%, transparent 2%);
+  background-color: var(--bg-dark) !important;
+  color: var(--text-dark-primary) !important;
 }
 
 .app-content {
@@ -81,65 +92,68 @@ body {
 
 h1.arcade-title {
   font-family: var(--font-title);
-  font-size: 1.6rem;
-  font-weight: bold;
+  font-size: 2.2rem;
+  font-weight: 700;
   text-align: center;
-  color: var(--color-yellow);
+  color: #ff4757;
   margin-bottom: 2rem;
-  letter-spacing: 1px;
+  letter-spacing: 0.5px;
   text-transform: uppercase;
-  text-shadow: 
-    4px 4px 0 #000000, 
-    -2px -2px 0 #000000, 
-    2px -2px 0 #000000, 
-    -2px 2px 0 #000000, 
-    0px 4px 0 #000000;
-  line-height: 1.6;
+  text-shadow: 2px 3px 0 rgba(0, 0, 0, 0.05);
+  background: linear-gradient(90deg, #ff4757, #ff6b81, #ffa502);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 @media (max-width: 768px) {
   h1.arcade-title {
-    font-size: 1.1rem;
+    font-size: 1.6rem;
     margin-bottom: 1.2rem;
-    line-height: 1.5;
   }
 }
 
 .subtitle-arcade {
   font-family: var(--font-title);
-  font-size: 0.85rem;
-  color: var(--color-yellow);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--color-purple);
   margin-bottom: 1.2rem;
   text-align: center;
-  text-shadow: 2px 2px 0 #000000;
-  line-height: 1.4;
 }
 
-/* Classic Mario NES Dialogue/HUD Box */
+/* Rounded Bubbly Preguntados Dialogue/HUD Box */
 .arcade-panel {
-  background: #000000;
-  border: 4px solid #ffffff;
-  box-shadow: 0 0 0 4px #000000, 0 10px 0 rgba(0, 0, 0, 0.25);
-  border-radius: 12px;
+  background: var(--card-light);
+  border: none;
+  box-shadow: 0 12px 30px rgba(165, 175, 190, 0.16);
+  border-radius: var(--border-radius-lg);
   padding: 2.5rem;
   width: 100%;
   position: relative;
   overflow: hidden;
   margin-bottom: 1.5rem;
-  color: #ffffff;
+  color: var(--text-light-primary);
+  transition: all 0.3s ease;
+}
+
+/* Dark mode panel overrides */
+.table-linen-mode .arcade-panel {
+  background: var(--card-dark);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.4);
+  color: var(--text-dark-primary);
 }
 
 @media (max-width: 768px) {
   .arcade-panel {
-    padding: 1.5rem 1rem;
-    border-radius: 8px;
+    padding: 1.8rem 1.2rem;
+    border-radius: 20px;
   }
 }
 
 @media (max-width: 480px) {
   .arcade-panel {
-    padding: 1.2rem 0.8rem;
-    border-radius: 6px;
+    padding: 1.4rem 0.9rem;
+    border-radius: 16px;
     margin-bottom: 0.8rem;
   }
 }
@@ -160,109 +174,123 @@ h1.arcade-title {
 .gap-2 { gap: 1rem; }
 .gap-3 { gap: 1.5rem; }
 
-/* 3D Extrusion Blocky Buttons (Classic Nintendo) */
+/* Friendly, Rounded Buttons with Soft Shadow */
 .arcade-btn {
-  background: #e2e8f0;
-  color: #000000;
-  border: 4px solid #000000;
+  background: #e4e7eb;
+  color: #2f3542;
+  border: none;
   font-family: var(--font-title);
-  font-size: 0.75rem;
-  font-weight: bold;
+  font-size: 0.95rem;
+  font-weight: 700;
   letter-spacing: 0.5px;
-  padding: 0.9rem 1.6rem;
-  min-height: 54px;
+  padding: 0.9rem 1.8rem;
+  min-height: 52px;
   cursor: pointer;
   outline: none;
   position: relative;
-  border-radius: 8px;
-  box-shadow: 0 6px 0 #000000;
+  border-radius: 40px; /* Fully rounded capsule button! */
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.1);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   text-decoration: none;
   user-select: none;
-  transition: none; /* Instant snap response like a game controller button! */
-  margin-bottom: 8px;
+  transition: all 0.15s ease;
+  margin-bottom: 6px;
 }
 
-/* Button clicks translate down, reducing shadow height */
-.arcade-btn:active:not(:disabled) {
-  transform: translateY(6px);
-  box-shadow: 0 0px 0 #000000;
-}
-
+/* Button hover/clicks translate down, reducing shadow height */
 .arcade-btn:hover:not(:disabled) {
-  filter: brightness(1.1);
+  transform: translateY(-1px);
+  box-shadow: 0 5px 0 rgba(0, 0, 0, 0.1);
+  filter: brightness(1.05);
 }
 
-/* Nintendo Color Schemes */
+.arcade-btn:active:not(:disabled) {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
+}
+
+/* Category-aligned button colors */
 .arcade-btn.btn-pink {
-  background: #ff77a8;
-  color: #000000;
+  background: linear-gradient(135deg, #ff4757, #ff6b81);
+  color: #ffffff;
 }
 
 .arcade-btn.btn-yellow {
-  background: var(--color-yellow);
-  color: #000000;
+  background: linear-gradient(135deg, #ffa502, #ffb142);
+  color: #ffffff;
 }
 
 .arcade-btn.btn-green {
-  background: var(--color-green);
+  background: linear-gradient(135deg, #2ed573, #7bed9f);
   color: #ffffff;
 }
 
 .arcade-btn.btn-red {
-  background: var(--color-red);
+  background: linear-gradient(135deg, #e74c3c, #ff6b6b);
   color: #ffffff;
 }
 
 .arcade-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
-  filter: grayscale(0.5);
-  box-shadow: 0 4px 0 #333333;
   transform: none !important;
+  box-shadow: none !important;
 }
 
-/* Blinking coin text */
+/* Faint pulsing text */
 .flicker-text {
-  animation: mario-blink 0.8s infinite steps(2);
+  animation: bubbly-pulse 1.5s infinite ease-in-out;
 }
 
-@keyframes mario-blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
+@keyframes bubbly-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.85; transform: scale(1.01); }
 }
 
-/* Block Inputs */
+/* Smooth Input Fields */
 .arcade-input {
-  background: #ffffff;
-  border: 4px solid #000000;
+  background: #f1f2f6;
+  border: 2px solid #e4e7eb;
   font-family: var(--font-standard);
-  font-weight: bold;
+  font-weight: 600;
   font-size: 1.1rem;
-  color: #000000;
-  padding: 0.7rem 1rem;
+  color: #2f3542;
+  padding: 0.8rem 1.2rem;
   outline: none;
-  border-radius: 6px;
+  border-radius: 12px;
   width: 100%;
   text-align: center;
-  box-shadow: inset 0 3px 0 rgba(0,0,0,0.1);
+  transition: all 0.2s;
+}
+
+.table-linen-mode .arcade-input {
+  background: #2b3242;
+  border-color: #3e485e;
+  color: #ffffff;
 }
 
 .arcade-input:focus {
-  background: #fffae0;
+  border-color: var(--color-blue);
+  background: #ffffff;
+}
+.table-linen-mode .arcade-input:focus {
+  background: #1e2433;
 }
 
 .arcade-label {
   font-family: var(--font-title);
-  font-weight: bold;
-  font-size: 0.65rem;
-  color: var(--color-yellow);
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--color-purple);
   margin-bottom: 0.6rem;
   display: block;
-  letter-spacing: 0.5px;
-  line-height: 1.4;
+  letter-spacing: 0.3px;
+}
+
+.table-linen-mode .arcade-label {
+  color: var(--color-yellow);
 }
 
 /* Categories Grid */
@@ -288,77 +316,82 @@ h1.arcade-title {
   user-select: none;
   font-family: var(--font-standard);
   font-size: 0.95rem;
-  font-weight: 700;
-  color: #ffffff;
-  background: rgba(255, 255, 255, 0.1);
-  border: 3px solid #ffffff;
-  border-radius: 8px;
+  font-weight: 600;
+  color: var(--text-light-primary);
+  background: #f1f2f6;
+  border: 2px solid #e4e7eb;
+  border-radius: 12px;
   padding: 0.5rem 0.7rem;
   min-height: 46px;
+  transition: all 0.2s;
 }
 
-@media (max-width: 480px) {
-  .checkbox-item {
-    padding: 0.4rem 0.6rem;
-    font-size: 0.85rem;
-    min-height: 42px;
-  }
+.table-linen-mode .checkbox-item {
+  background: #252c3c;
+  border-color: #3e485e;
+  color: var(--text-dark-primary);
 }
 
 .checkbox-item:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: #e4e7eb;
+  transform: translateY(-1px);
+}
+.table-linen-mode .checkbox-item:hover {
+  background: #2f384d;
 }
 
 .checkbox-custom {
-  width: 20px;
-  height: 20px;
-  border: 3px solid #ffffff;
-  border-radius: 4px;
-  background: #000;
+  width: 22px;
+  height: 22px;
+  border: 2px solid #ced6e0;
+  border-radius: 50%; /* Circle check button! */
+  background: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
 }
 
-.checkbox-item:hover .checkbox-custom {
-  border-color: var(--color-yellow);
-}
-
 .checkbox-custom.checked {
-  background-color: var(--color-yellow);
-  border-color: #ffffff;
+  background-color: var(--color-green);
+  border-color: var(--color-green);
+  box-shadow: 0 2px 6px rgba(46, 213, 115, 0.3);
 }
 
 .checkbox-custom.checked::after {
-  content: '✔';
-  font-size: 0.75rem;
-  color: #000000;
-  font-weight: 900;
+  content: '✓';
+  font-size: 0.85rem;
+  color: #ffffff;
+  font-weight: 700;
 }
 
-/* NES Game HUD Bar */
+/* Friendly Pill HUD Bar */
 .hud-bar {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  padding: 0.8rem 1.2rem;
-  background: #000000;
-  border: 3px solid #ffffff;
-  border-radius: 8px;
+  padding: 0.8rem 1.4rem;
+  background: #f1f2f6;
+  border-radius: 50px; /* Bubbly capsule shape */
   font-family: var(--font-title);
-  font-size: 0.65rem;
-  color: #ffffff;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-light-primary);
   margin-bottom: 1.5rem;
   gap: 0.5rem;
 }
 
+.table-linen-mode .hud-bar {
+  background: #252c3c;
+  color: var(--text-dark-primary);
+}
+
 @media (max-width: 480px) {
   .hud-bar {
-    padding: 0.6rem 0.5rem;
-    font-size: 0.6rem;
+    padding: 0.6rem 1rem;
+    font-size: 0.75rem;
   }
 }
 
@@ -368,22 +401,23 @@ h1.arcade-title {
 }
 
 .hud-value {
-  color: var(--color-yellow);
+  color: var(--color-blue);
   margin-left: 0.4rem;
 }
 
-/* Category stamp badge */
+/* Category Badge Stamps (Dynamic Colors depending on text if possible, but general brand color is fine) */
 .category-badge {
   display: inline-block;
-  padding: 0.4rem 0.8rem;
+  padding: 0.4rem 1rem;
   font-family: var(--font-title);
-  font-size: 0.6rem;
-  border: 3px solid var(--color-yellow);
-  border-radius: 6px;
-  color: var(--color-yellow);
+  font-weight: 700;
+  font-size: 0.75rem;
+  border-radius: 20px;
+  color: #ffffff;
+  background-color: var(--color-purple);
   margin-bottom: 1.2rem;
   text-transform: uppercase;
-  background: rgba(254, 195, 16, 0.08);
+  box-shadow: 0 4px 10px rgba(155, 89, 182, 0.2);
 }
 
 /* Question Area */
@@ -394,11 +428,15 @@ h1.arcade-title {
 
 .question-text {
   font-family: var(--font-standard);
-  font-size: clamp(1.3rem, 4.2vw, 1.8rem);
-  font-weight: 900;
-  line-height: 1.35;
+  font-size: clamp(1.3rem, 4.2vw, 1.7rem);
+  font-weight: 700;
+  line-height: 1.4;
   margin-bottom: 1.5rem;
-  color: #ffffff;
+  color: var(--text-light-primary);
+}
+
+.table-linen-mode .question-text {
+  color: var(--text-dark-primary);
 }
 
 /* Multiple choice layout */
@@ -416,46 +454,58 @@ h1.arcade-title {
   }
 }
 
-/* Blocky option buttons */
+/* Bubbly Option Buttons */
 .option-btn {
   background: #ffffff;
-  border: 4px solid #000000;
-  color: #000000;
+  border: 2px solid #e4e7eb;
+  color: var(--text-light-primary);
   font-family: var(--font-standard);
-  font-size: clamp(0.95rem, 2.8vw, 1.1rem);
-  font-weight: 800;
-  padding: 0.9rem;
+  font-size: clamp(0.95rem, 2.8vw, 1.05rem);
+  font-weight: 700;
+  padding: 0.9rem 1.2rem;
   min-height: 56px;
   text-align: left;
-  border-radius: 8px;
+  border-radius: 18px; /* High radius! */
   cursor: pointer;
-  box-shadow: 0 5px 0 #000000;
+  box-shadow: 0 4px 10px rgba(165, 175, 190, 0.08);
   display: flex;
   align-items: center;
   position: relative;
-  transition: none;
+  transition: all 0.15s ease;
 }
 
-.option-btn:active:not(:disabled) {
-  transform: translateY(5px);
-  box-shadow: 0 0px 0 #000000;
+.table-linen-mode .option-btn {
+  background: #252c3c;
+  border-color: #3e485e;
+  color: var(--text-dark-primary);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
 }
 
 .option-btn:hover:not(:disabled) {
-  background-color: #fffae0;
+  transform: translateY(-2px);
+  border-color: var(--color-blue);
+  box-shadow: 0 6px 15px rgba(52, 152, 219, 0.15);
+  background-color: #fafbfc;
+}
+.table-linen-mode .option-btn:hover:not(:disabled) {
+  background-color: #2b364a;
+}
+
+.option-btn:active:not(:disabled) {
+  transform: translateY(1px);
+  box-shadow: 0 2px 4px rgba(165, 175, 190, 0.08);
 }
 
 .option-label {
   font-family: var(--font-title);
-  font-weight: bold;
-  font-size: 0.7rem;
+  font-weight: 700;
+  font-size: 0.8rem;
   color: #ffffff;
   margin-right: 0.8rem;
   width: 28px;
   height: 28px;
-  border: 3px solid #000000;
+  border-radius: 50%; /* Circle option labels */
   background: var(--color-orange);
-  border-radius: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -466,11 +516,8 @@ h1.arcade-title {
 .option-btn.correct {
   background-color: var(--color-green) !important;
   color: #ffffff !important;
-  box-shadow: 0 5px 0 #1b5e20 !important;
-}
-.option-btn.correct:active {
-  transform: translateY(5px);
-  box-shadow: 0 0px 0 #1b5e20 !important;
+  border-color: var(--color-green) !important;
+  box-shadow: 0 6px 15px rgba(46, 213, 115, 0.25) !important;
 }
 .option-btn.correct .option-label {
   background: #ffffff !important;
@@ -480,11 +527,8 @@ h1.arcade-title {
 .option-btn.incorrect {
   background-color: var(--color-red) !important;
   color: #ffffff !important;
-  box-shadow: 0 5px 0 #7f1d1d !important;
-}
-.option-btn.incorrect:active {
-  transform: translateY(5px);
-  box-shadow: 0 0px 0 #7f1d1d !important;
+  border-color: var(--color-red) !important;
+  box-shadow: 0 6px 15px rgba(231, 76, 60, 0.25) !important;
 }
 .option-btn.incorrect .option-label {
   background: #ffffff !important;
@@ -493,18 +537,18 @@ h1.arcade-title {
 
 /* Screen shaking */
 .screen-shake {
-  animation: shake-mario 0.35s ease;
+  animation: shake-bubbly 0.35s ease;
 }
 
-@keyframes shake-mario {
-  0%, 100% { transform: translateY(0); }
-  20% { transform: translateY(-5px); }
-  40% { transform: translateY(5px); }
-  60% { transform: translateY(-3px); }
-  80% { transform: translateY(3px); }
+@keyframes shake-bubbly {
+  0%, 100% { transform: scale(1); }
+  20% { transform: scale(0.98) rotate(-1deg); }
+  40% { transform: scale(1.02) rotate(1deg); }
+  60% { transform: scale(0.99) rotate(-0.5deg); }
+  80% { transform: scale(1.01) rotate(0.5deg); }
 }
 
-/* Toggles (Nintendo HUD theme) */
+/* Theme / Sound Toggles */
 .effect-toggle-container {
   position: absolute;
   top: 12px;
@@ -524,20 +568,34 @@ h1.arcade-title {
 }
 
 .toggle-icon-btn {
-  background: #000000;
-  border: 3px solid #ffffff;
-  color: #ffffff;
+  background: #ffffff;
+  border: 2px solid #e4e7eb;
+  color: #2f3542;
   font-family: var(--font-title);
-  font-size: 0.55rem;
-  padding: 0.4rem 0.6rem;
-  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
   cursor: pointer;
-  box-shadow: 0 3px 0 #000000;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  transition: all 0.2s;
+}
+
+.table-linen-mode .toggle-icon-btn {
+  background: #1e2433;
+  border-color: #3e485e;
+  color: #ffffff;
+}
+
+.toggle-icon-btn:hover {
+  background: #f1f2f6;
+}
+.table-linen-mode .toggle-icon-btn:hover {
+  background: #2b3242;
 }
 
 .toggle-icon-btn:active {
-  transform: translateY(3px);
-  box-shadow: none;
+  transform: scale(0.96);
 }
 
 /* Leaderboard Table */
@@ -546,59 +604,72 @@ h1.arcade-title {
   border-collapse: collapse;
   margin: 1rem 0;
   font-family: var(--font-standard);
-  font-weight: 700;
+  font-weight: 600;
   font-size: 1.05rem;
 }
 
 .retro-table th {
   font-family: var(--font-title);
-  font-size: 0.6rem;
-  color: var(--color-yellow);
+  font-size: 0.8rem;
+  color: var(--color-purple);
   text-align: left;
   padding: 0.8rem;
-  border-bottom: 4px solid #ffffff;
+  border-bottom: 2px solid #e4e7eb;
+}
+.table-linen-mode .retro-table th {
+  color: var(--color-yellow);
+  border-bottom-color: #3e485e;
 }
 
 .retro-table td {
   padding: 0.9rem 0.8rem;
-  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
-  color: #ffffff;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  color: var(--text-light-primary);
+}
+.table-linen-mode .retro-table td {
+  border-bottom-color: rgba(255,255,255,0.05);
+  color: var(--text-dark-primary);
 }
 
 .retro-table tr:hover td {
-  background: rgba(255, 255, 255, 0.1);
-  color: var(--color-yellow);
+  background: rgba(52, 152, 219, 0.05);
 }
 
 .place-badge {
   font-family: var(--font-title);
-  font-size: 0.55rem;
-  padding: 0.2rem 0.4rem;
-  border-radius: 4px;
-  border: 2px solid #ffffff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.2rem 0.5rem;
+  border-radius: 20px;
+  color: #ffffff;
   display: inline-block;
 }
-.place-1 { border-color: var(--color-yellow); color: var(--color-yellow); }
-.place-2 { border-color: #cbd5e1; color: #cbd5e1; }
-.place-3 { border-color: #d97706; color: #d97706; }
+.place-1 { background-color: var(--color-yellow); }
+.place-2 { background-color: #bdc3c7; }
+.place-3 { background-color: #d35400; }
 
-/* Blocky Timer Bar */
+/* Jelly Capsule Timer Bar */
 .timer-bar-container {
   width: 100%;
-  height: 16px;
-  background: #000000;
-  border: 3px solid #ffffff;
-  border-radius: 8px;
+  height: 18px;
+  background: #f1f2f6;
+  border-radius: 20px;
   margin-bottom: 1.5rem;
   overflow: hidden;
-  padding: 1px;
+  padding: 2px;
+  border: 1px solid #e4e7eb;
+}
+
+.table-linen-mode .timer-bar-container {
+  background: #1e2433;
+  border-color: #3e485e;
 }
 
 .timer-bar-fill {
   height: 100%;
-  background: var(--color-yellow);
+  background: linear-gradient(90deg, var(--color-blue), var(--color-purple));
   width: 100%;
-  border-radius: 4px;
+  border-radius: 20px;
   transition: width 0.1s linear;
 }
 
@@ -623,17 +694,23 @@ h1.arcade-title {
 }
 
 .player-card {
-  background: rgba(255, 255, 255, 0.1);
-  border: 3px solid #ffffff;
-  border-radius: 8px;
+  background: #f1f2f6;
+  border: 2px solid #e4e7eb;
+  border-radius: 16px;
   padding: 0.8rem;
   text-align: center;
   font-family: var(--font-standard);
-  font-weight: bold;
+  font-weight: 700;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   max-width: 100%;
+  transition: all 0.3s;
+}
+
+.table-linen-mode .player-card {
+  background: #252c3c;
+  border-color: #3e485e;
 }
 
 @media (max-width: 480px) {
@@ -644,25 +721,29 @@ h1.arcade-title {
 
 .player-card.is-ready {
   border-color: var(--color-green);
-  background-color: rgba(67, 176, 71, 0.2);
+  background-color: rgba(46, 213, 115, 0.1);
 }
 
-/* Room code display responsive container */
+/* Access Code Bubble display */
 .room-code-display {
-  font-size: clamp(2rem, 8vw, 3rem);
+  font-size: clamp(2rem, 8vw, 2.8rem);
   font-family: var(--font-title);
-  font-weight: bold;
-  color: var(--color-yellow);
-  text-shadow: 3px 3px 0 #000000;
+  font-weight: 700;
+  color: #ff4757;
   letter-spacing: 2px;
-  border: 4px dashed #ffffff;
+  border: 2px dashed #ff4757;
   padding: 0.4rem 2rem;
   margin: 0.8rem 0;
-  background: #000000;
+  background: #fff0f2;
   cursor: pointer;
-  border-radius: 8px;
+  border-radius: 20px;
   position: relative;
   text-align: center;
+}
+
+.table-linen-mode .room-code-display {
+  background: #2d181e;
+  border-color: #ff4757;
 }
 
 @media (max-width: 480px) {

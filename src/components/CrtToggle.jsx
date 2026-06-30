@@ -6,9 +6,9 @@ export default function CrtToggle({ crtEnabled, setCrtEnabled, soundEnabled, set
       <button 
         className="toggle-icon-btn" 
         onClick={() => setCrtEnabled(!crtEnabled)}
-        title="Alternar fondo Día (1-1) / Noche (1-2)"
+        title="Alternar Tema Claro / Tema Oscuro"
       >
-        MUNDO: {crtEnabled ? "1-1 ☀️" : "1-2 🌙"}
+        TEMA: {crtEnabled ? "CLARO ☀️" : "OSCURO 🌙"}
       </button>
       <button 
         className="toggle-icon-btn" 
